@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+composer.phar
+dist
+node_modules
+vendor
+webpack-assets.json
