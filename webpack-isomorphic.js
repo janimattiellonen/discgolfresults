@@ -1,11 +1,11 @@
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 
 module.exports = {
-    assets:
+  assets:
+  {
+    images:
     {
-        images:
-        {
-            extensions: ['png', 'jpg', 'gif', 'ico', 'svg']
-        }
+      extensions: ['png', 'jpg', 'gif', 'ico', 'svg']
     }
+  }
 };

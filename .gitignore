@@ -1,7 +1,12 @@
-.DS_Store
-.idea
-composer.phar
+.history
 dist
+/.idea
+/*.iml
+/.idea_modules
+/.settings
+.DS_Store
+config.server.js
 node_modules
-vendor
+npm-debug.log
+.env
 webpack-assets.json

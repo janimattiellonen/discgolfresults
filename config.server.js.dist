@@ -1,0 +1,15 @@
+var port = 5690;
+
+module.exports = {
+    server: {
+        'port': port,
+        'url': 'http://localhost:' + port
+    },
+    'db': {
+    	'host': 'localhost',
+    	'user': 'root',
+    	'password': '',
+    	'database': 'discgolfscoresfinalresults'
+    },
+    port: port
+};

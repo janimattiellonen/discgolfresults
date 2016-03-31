@@ -50,9 +50,9 @@ const common = {
     module: {
         loaders: [
             {
-                test: /\.json$/,
-                loader: 'json-loader'
-            },
+              test: /\.json$/,
+              loader: 'json-loader'
+            },        
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
@@ -84,7 +84,8 @@ const common = {
                 test: webpack_isomorphic_tools_plugin.regular_expression('images'),
                 loaders: [
                     'file?hash=sha512&digest=hex&name=assets/images/[hash:base58:8].[ext]',
-                    'img?minimize&optimizationLevel=5&progressive=true'
+                    'img?minimize&optimizationLevel=5&progressive=true',
+                    'file'
                 ],
                 include: [
                     PATHS.src,
@@ -124,14 +125,14 @@ const common = {
 const envs = {
 
     test: {
-        devtool: 'inline-source-map' //just do inline source maps instead of the default
+      devtool: 'inline-source-map' //just do inline source maps instead of the default
     },
 
     development: {
         devtool: 'cheap-module-source-map',
         entry: [
             'webpack-hot-middleware/client',
-            './client/src/client.js'
+            './src/client.js'
         ],
         output: {
             path: path.join(__dirname, 'dist'),
@@ -145,20 +146,19 @@ const envs = {
 
             new HtmlWebpackPlugin({
                 title: 'JavaScript SchamaScript',
-                template: 'web/app.html',
+                template: 'web/index.html',
                 inject: 'body'
             }),
             new webpack.DefinePlugin({
                 __DEVELOPMENT__: process.env.NODE_ENV === 'development',
                 __DEVTOOLS__: false
             }),
-
         ]
     },
     prod: {
         devtool: 'source-map',
         entry: {
-            client: './client/src/client.js',
+            client: './src/client.js',
             vendor: Object.keys(pkg.dependencies)
         },
 
@@ -176,8 +176,8 @@ const envs = {
             new webpack.optimize.OccurenceOrderPlugin(),
             new ExtractTextPlugin("styles.[contenthash].css"),
             new HtmlWebpackPlugin({
-                title: 'Pekkis Goes To Movies',
-                template: 'web/app.html',
+                title: 'My discs',
+                template: 'web/index.html',
                 inject: 'body',
             }),
             new webpack.optimize.UglifyJsPlugin({
