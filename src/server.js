@@ -56,7 +56,8 @@ createServer(config, webpackConfig, (app) => {
 
                 let version = {
                     holes: holes,
-                    total_par: result.par_total
+                    total_par: result.par_total,
+                    total_length: result.lenght_total
                 };
 
                 course.version = version;

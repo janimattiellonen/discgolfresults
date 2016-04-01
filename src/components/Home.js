@@ -33,6 +33,7 @@ export default class Home extends Component {
 									<th>{(index + 1)}</th>
 								)
 							})}
+							<th>Total</th>
 						</tr>
 						<tr>
 							<th>Par</th>
@@ -41,12 +42,34 @@ export default class Home extends Component {
 									<td>{this.getParForHole(index + 1)}</td>
 								)
 							})}
+							<td>{course.version.total_par}</td>
 						</tr>
 						<tr>
 							<th>Length (m)</th>
 							{_.range(fairwayCount).map(index => {
 								return (
 									<td>{this.getHoleLength(index + 1)}</td>
+								)
+							})}
+							<td>{course.version.total_length}</td>
+						</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+					<tfoot>
+
+					</tfoot>
+				</table>
+				<br/>
+				<br/>
+				<table>
+					<thead>
+						<tr>
+							<th>{course.code}</th>
+							{_.range(fairwayCount).map(index => {
+								return (
+									<th>{(index + 1)}</th>
 								)
 							})}
 						</tr>
