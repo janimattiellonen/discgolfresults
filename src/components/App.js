@@ -17,6 +17,6 @@ export default class App extends React.Component {
     }
 
     componentWillMount() {
-        //this.props.discActions.getDiscs();
+        this.props.scoreActions.getScores();
     }    
 }

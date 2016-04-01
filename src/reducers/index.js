@@ -1,2 +1,2 @@
-export { default as discs } from './discs';
+export { default as scores } from './scores';
 

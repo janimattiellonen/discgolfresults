@@ -1,17 +1,17 @@
 import App from '../App';
-import * as DiscActions from '../../actions/DiscActions';
+import * as ScoreActions from '../../actions/ScoreActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 export default connect(
     function mapStateToProps(state) {
         return {
-			discs: state.discs.discs
+			scores: state.scores.scores
         }
     },
     function mapDispatchToProps(dispatch) {
         return { 
-        	discActions: bindActionCreators(DiscActions, dispatch), 
+        	scoreActions: bindActionCreators(ScoreActions, dispatch), 
         };
     }
 )(App);
