@@ -9,6 +9,7 @@ import { List } from 'immutable';
 export default connect(
     function(state) {
         return {
+            course: state.scores.course,
             scores: state.scores.scores
         };
     },

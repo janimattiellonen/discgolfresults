@@ -33,7 +33,20 @@ createServer(config, webpackConfig, (app) => {
         scoreService.setConnection(connection);
 
         scoreService.getScores(10, (err, results) => {
-            res.status(200).json({data: results});
+
+            let course = {};
+
+            if (results.length > 0) {
+                course.code = results[0].code;
+                course.name = results[0].name;
+            }
+
+            let data = {
+                course:  course,
+                results: results,
+            };
+
+            res.status(200).json({data: data});
         });
     });
 
