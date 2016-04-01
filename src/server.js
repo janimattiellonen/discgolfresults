@@ -7,6 +7,7 @@ import fs from 'fs';
 import express from 'express';
 import axios from 'axios';
 import mysql from 'mysql';
+import _ from 'lodash';
 
 import ScoreService from './services/ScoreService';
 
@@ -37,8 +38,28 @@ createServer(config, webpackConfig, (app) => {
             let course = {};
 
             if (results.length > 0) {
-                course.code = results[0].code;
-                course.name = results[0].name;
+                let result = results[0];
+
+                course.code = result.code;
+                course.name = result.name;
+                course.fairway_count = result.fairway_count;
+
+                let holes = [];
+
+                _.range(result.fairway_count).map(index => {
+                    holes.push({
+                        number: (index + 1),
+                        par: result['par_' + (index + 1)],
+                        length: result['lenght_' + (index + 1)]
+                    });
+                });
+
+                let version = {
+                    holes: holes,
+                    total_par: result.par_total
+                };
+
+                course.version = version;
             }
 
             let data = {

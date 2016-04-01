@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import { List } from 'immutable';
 import SmartSearch from 'smart-search';
+import classNames from 'classnames';
 
 import * as Utils from '../utils';
 
@@ -19,7 +20,7 @@ export default class Home extends Component {
 	render() {
 		
 		const { course, scores } = this.props;
-		let fairwayCount = scores.count() > 0 ? scores.get(0).fairway_count : 0;
+		let fairwayCount = course.fairway_count;
 
 		return (
 			<div>
@@ -35,12 +36,14 @@ export default class Home extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{scores.map((score, i) =>{
+						{scores.map((score, i) => {
 							return (
 								<tr>
-									<td>{Utils.date_format(score.date)}</td>
-									{_.range(fairwayCount).map(index => {
-										return (<td>{score['t' + (index + 1)]}</td>)
+									<td key={'date' + i}>{Utils.date_format(score.date)}</td>
+									{_.range(fairwayCount).map((index, j) => {
+										let result = score['t' + (index + 1)];
+										let key = 'score' + i + '-' + j;
+										return (<td key={key} className={classNames(this.getScoreClass(result, j + 1))}>{result}</td>);
 									})}
 								</tr>
 							)
@@ -53,4 +56,24 @@ export default class Home extends Component {
 			</div>
 		);
 	}	
+
+	getScoreClass(score, hole) {
+		const { course } = this.props;
+
+		const par = course.version.holes[hole - 1].par;
+
+		if (score == 1) {
+			return 'hole-ine-one';
+		} else if (par - score == 1) {
+			return 'birdie';
+		} else if (par - score == 2) {
+			return 'eagle';
+		} else if (par - score == -1) {
+			return 'bogey';
+		} else if (par - score == -2) {
+			return 'double-bogey'
+		} else {
+			return 'other';
+		}
+	}
 };
