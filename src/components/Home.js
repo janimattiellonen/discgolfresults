@@ -34,6 +34,22 @@ export default class Home extends Component {
 								)
 							})}
 						</tr>
+						<tr>
+							<th>Par</th>
+							{_.range(fairwayCount).map(index => {
+								return (
+									<td>{this.getParForHole(index + 1)}</td>
+								)
+							})}
+						</tr>
+						<tr>
+							<th>Length (m)</th>
+							{_.range(fairwayCount).map(index => {
+								return (
+									<td>{this.getHoleLength(index + 1)}</td>
+								)
+							})}
+						</tr>
 					</thead>
 					<tbody>
 						{scores.map((score, i) => {
@@ -60,7 +76,7 @@ export default class Home extends Component {
 	getScoreClass(score, hole) {
 		const { course } = this.props;
 
-		const par = course.version.holes[hole - 1].par;
+		const par = this.getParForHole(hole);
 
 		if (score == 1) {
 			return 'hole-ine-one';
@@ -75,5 +91,17 @@ export default class Home extends Component {
 		} else {
 			return 'other';
 		}
+	}
+
+	getParForHole(hole) {
+		const { course } = this.props;
+
+		return course.version.holes[hole - 1].par;
+	}
+
+	getHoleLength(hole) {
+		const { course } = this.props;
+
+		return course.version.holes[hole - 1].length;
 	}
 };
