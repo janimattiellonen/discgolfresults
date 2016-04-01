@@ -20,17 +20,27 @@ export default class Home extends Component {
 
 		return (
 			<div>
-				<ul>
-				{scores.map((score, i) =>{
-					return (
-						<li key={i}>
-							{_.range(fairwayCount).map(index => {
-								return score['t' + (index + 1)] + ', ';
-							})}
-						</li>
-					)
-				})}	
-				</ul>
+				<table>
+					<thead>
+						{_.range(fairwayCount).map(index => {
+							return (<th>{(index + 1)}</th>)
+						})}
+					</thead>
+					<tbody>
+						{scores.map((score, i) =>{
+							return (
+								<tr>
+									{_.range(fairwayCount).map(index => {
+										return (<td>{score['t' + (index + 1)]}</td>)
+									})}
+								</tr>
+							)
+						})}	
+					</tbody>
+					<tfoot>
+
+					</tfoot>
+				</table>
 			</div>
 		);
 	}	
