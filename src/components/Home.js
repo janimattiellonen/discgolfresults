@@ -15,9 +15,22 @@ export default class Home extends Component {
 
 	render() {
 		
+		const { scores } = this.props;
+		let fairwayCount = scores.count() > 0 ? scores.get(0).fairway_count : 0;
+
 		return (
 			<div>
-				Foo
+				<ul>
+				{scores.map((score, i) =>{
+					return (
+						<li key={i}>
+							{_.range(fairwayCount).map(index => {
+								return score['t' + (index + 1)] + ', ';
+							})}
+						</li>
+					)
+				})}	
+				</ul>
 			</div>
 		);
 	}	
