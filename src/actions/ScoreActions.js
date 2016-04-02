@@ -10,7 +10,6 @@ export function loadScores(scores) {
 export function getScores() {
 	return function(dispatch, getState) {
 		api.getScores().then(scores => {
-			console.log("ss: " + JSON.stringify(scores));
 			return dispatch(loadScores(scores));
 		}).catch((response) => {
 			console.log("foo: " + JSON.stringify(response));

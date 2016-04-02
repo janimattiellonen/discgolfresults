@@ -2,15 +2,47 @@ body {
 	background: #f8f8f8;
 }
 
+.search-container {
+	float: left;
+	width: 10%;
+}
+
+.scores-container {
+	float: left;
+	width: 90%;
+}
+
 table {
 	width: 100%;
 
+	tr {
+		td, th {
+			text-align: center;
+
+			&:first-child {
+				text-align: left;
+			}
+		}
+
+		th {
+			&:first-child {
+				width: 10%;
+			}
+
+			&:last-child {
+				width: 7%;
+			}
+		}
+
+
+	}
+
 	tbody {
 		border-top: solid black 1px;
-		
+
 		tr:nth-child(odd) {
 			background: #f3f3f3;
-			}
+		}
 	}
 }
 

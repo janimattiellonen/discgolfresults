@@ -7,6 +7,7 @@ export default class ScoreService {
         this.connection.query(
             `SELECT
                 s.id AS score_id,
+                s.par_total as score,
                 s.*,
                 v.id AS version_id,
                 v.*,

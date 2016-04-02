@@ -5,6 +5,7 @@ import moment from 'moment';
 import { List } from 'immutable';
 import SmartSearch from 'smart-search';
 import classNames from 'classnames';
+import Select from 'react-select';
 
 import * as Utils from '../utils';
 
@@ -14,87 +15,101 @@ export default class Home extends Component {
 		super(props);
 
 		this.state = {
+			course: null
 		};
+	}
+
+	handleChange(val) {
+		if (val) {
+			this.setState({
+				course: val.value
+			});
+		}
 	}
 
 	render() {
 		
-		const { course, scores } = this.props;
+		const { course, version, scores } = this.props;
 		let fairwayCount = course.fairway_count;
+
+		let options = [
+			{ value: 'one', label: 'One' },
+			{ value: 'two', label: 'Two' }
+		];
 
 		return (
 			<div>
-				<table>
-					<thead>
-						<tr>
-							<th>{course.code}</th>
-							{_.range(fairwayCount).map(index => {
-								return (
-									<th>{(index + 1)}</th>
-								)
-							})}
-							<th>Total</th>
-						</tr>
-						<tr>
-							<th>Par</th>
-							{_.range(fairwayCount).map(index => {
-								return (
-									<td>{this.getParForHole(index + 1)}</td>
-								)
-							})}
-							<td>{course.version.total_par}</td>
-						</tr>
-						<tr>
-							<th>Length (m)</th>
-							{_.range(fairwayCount).map(index => {
-								return (
-									<td>{this.getHoleLength(index + 1)}</td>
-								)
-							})}
-							<td>{course.version.total_length}</td>
-						</tr>
-					</thead>
-					<tbody>
+				<div className="search-container">
+					<Select
+						name="form-field-name"
+						value={this.state.course}
+						options={options}
+						onChange={::this.handleChange}
+					/>
+				</div>
 
-					</tbody>
-					<tfoot>
-
-					</tfoot>
-				</table>
-				<br/>
-				<br/>
-				<table>
-					<thead>
-						<tr>
-							<th>{course.code}</th>
-							{_.range(fairwayCount).map(index => {
+				<div className="scores-container">
+					<table>
+						<thead>
+							<tr>
+								<th>{course.code}</th>
+								{_.range(fairwayCount).map(index => {
+									return (
+										<th>{(index + 1)}</th>
+									)
+								})}
+								<th>Total</th>
+							</tr>
+							<tr>
+								<th>Par</th>
+								{_.range(fairwayCount).map(index => {
+									return (
+										<td>{this.getParForHole(index + 1)}</td>
+									)
+								})}
+								<td>{version.total_par}</td>
+							</tr>
+							<tr>
+								<th>Length (m)</th>
+								{_.range(fairwayCount).map(index => {
+									return (
+										<td>{this.getHoleLength(index + 1)}</td>
+									)
+								})}
+								<td>{version.total_length}</td>
+							</tr>						
+						</thead>
+						<tbody>
+							{scores.map((score, i) => {
 								return (
-									<th>{(index + 1)}</th>
+									<tr>
+										<td key={'date' + i}>{Utils.date_format(score.date)}</td>
+										{_.range(fairwayCount).map((index, j) => {
+											let result = score['t' + (index + 1)];
+											let key = 'score' + i + '-' + j;
+											return (<td key={key} className={classNames(this.getScoreClass(result, j + 1))}>{result}</td>);
+										})}
+										<td>{score.total} ({this.renderScore(score.score)})</td>
+									</tr>
 								)
-							})}
-						</tr>
-					</thead>
-					<tbody>
-						{scores.map((score, i) => {
-							return (
-								<tr>
-									<td key={'date' + i}>{Utils.date_format(score.date)}</td>
-									{_.range(fairwayCount).map((index, j) => {
-										let result = score['t' + (index + 1)];
-										let key = 'score' + i + '-' + j;
-										return (<td key={key} className={classNames(this.getScoreClass(result, j + 1))}>{result}</td>);
-									})}
-								</tr>
-							)
-						})}	
-					</tbody>
-					<tfoot>
+							})}	
+						</tbody>
+						<tfoot>
 
-					</tfoot>
-				</table>
+						</tfoot>
+					</table>
+				</div>
 			</div>
 		);
 	}	
+
+	renderScore(score) {
+		if (score > 0) {
+			return "+" + score;
+		}
+
+		return score;
+	}
 
 	getScoreClass(score, hole) {
 		const { course } = this.props;
@@ -117,14 +132,21 @@ export default class Home extends Component {
 	}
 
 	getParForHole(hole) {
-		const { course } = this.props;
+		const { version } = this.props;
 
-		return course.version.holes[hole - 1].par;
+		return version.holes[hole - 1].par;
 	}
 
 	getHoleLength(hole) {
-		const { course } = this.props;
+		const { version } = this.props;
 
-		return course.version.holes[hole - 1].length;
+		return version.holes[hole - 1].length;
 	}
+};
+
+Home.defaultProps = {
+    version: {
+    	total_length: 0,
+    	total_par: 0
+    }
 };

@@ -10,6 +10,7 @@ export default connect(
     function(state) {
         return {
             course: state.scores.course,
+            version: state.scores.course.version,
             scores: state.scores.scores
         };
     },
