@@ -12,7 +12,7 @@ import * as reducers from './reducers';
 import { createRouter } from './router';
 
 require('bootstrap/dist/css/bootstrap.css');
-require('react-select/dist/default.css');
+require('react-select/dist/react-select.min.css');
 require('./app.less');
 require('bootstrap/dist/js/bootstrap.js');
 require('jquery-ui/themes/base/jquery-ui.css');
