@@ -18,5 +18,6 @@ export default class App extends React.Component {
 
     componentWillMount() {
         this.props.scoreActions.getScores();
+        this.props.courseActions.getCourses();
     }    
 }

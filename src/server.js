@@ -8,7 +8,9 @@ import express from 'express';
 import axios from 'axios';
 import mysql from 'mysql';
 import _ from 'lodash';
+import {OrderedMap} from 'immutable';
 
+import CourseService from './services/CourseService';
 import ScoreService from './services/ScoreService';
 
 const ENV = process.env.NODE_ENV;
@@ -27,9 +29,33 @@ createServer(config, webpackConfig, (app) => {
     app.use(bodyParser({limit: '50mb'}));
     app.use(express.static('web'));
 
+    let courseService = new CourseService();
     let scoreService = new ScoreService();
 
-    app.get('/api/scores', function (req, res) {
+    app.get('/api/courses', (req, res) => {
+        let connection = getConnection();
+        courseService.setConnection(connection);
+
+        courseService.getCourses((err, results) => {
+
+            let courses = OrderedMap();
+
+            results.map(result => {
+                let course = courses.get(result.course_id);
+
+                if (null == course) {
+                    course = {
+                        
+                    }
+                }
+            });
+
+
+            res.status(200).json({ok: true});
+        });
+    });
+
+    app.get('/api/scores', (req, res) => {
         let connection = getConnection();
         scoreService.setConnection(connection);
 
