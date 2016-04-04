@@ -28,14 +28,17 @@ export default class Home extends Component {
 	}
 
 	render() {
-		
-		const { course, version, scores } = this.props;
-		let fairwayCount = course.fairway_count;
+		const { course, courses, version, scores } = this.props;
 
-		let options = [
-			{ value: 'one', label: 'One' },
-			{ value: 'two', label: 'Two' }
-		];
+		let fairwayCount = course.fairway_count;
+		let options = [];
+
+		courses.map(c => {
+			options.push({
+				value: c.id,
+				label: c.code
+			});
+		});
 
 		return (
 			<div>
@@ -82,7 +85,7 @@ export default class Home extends Component {
 						<tbody>
 							{scores.map((score, i) => {
 								return (
-									<tr>
+									<tr key={'score-' + i}>
 										<td key={'date' + i}>{Utils.date_format(score.date)}</td>
 										{_.range(fairwayCount).map((index, j) => {
 											let result = score['t' + (index + 1)];

@@ -10,6 +10,7 @@ import mysql from 'mysql';
 import _ from 'lodash';
 import {OrderedMap} from 'immutable';
 
+
 import CourseService from './services/CourseService';
 import ScoreService from './services/ScoreService';
 
@@ -37,21 +38,23 @@ createServer(config, webpackConfig, (app) => {
         courseService.setConnection(connection);
 
         courseService.getCourses((err, results) => {
-
             let courses = OrderedMap();
 
             results.map(result => {
-                let course = courses.get(result.course_id);
+                var course = courses.get(result.cid);
 
                 if (null == course) {
                     course = {
-                        
+                        id: result.cid,
+                        name: result.name,
+                        code: result.code,
+                        vid: result.vid
                     }
                 }
+                courses = courses.set(result.cid, course);
             });
 
-
-            res.status(200).json({ok: true});
+            res.status(200).json({data: courses.toArray()});
         });
     });
 

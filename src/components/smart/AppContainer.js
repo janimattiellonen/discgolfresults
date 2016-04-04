@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 export default connect(
     function mapStateToProps(state) {
         return {
-			scores: state.scores.scores
+			scores: state.scores.scores,
+            
         }
     },
     function mapDispatchToProps(dispatch) {

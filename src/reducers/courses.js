@@ -5,7 +5,7 @@ export default handleActions({
 	COURSES_LOAD: (state, action) => {
 		return {
 			...state,
-			courses: List(action.payload.courses),
+			courses: List(action.payload),
 		}
 	}
 }, {courses: List()});
