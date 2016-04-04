@@ -48,9 +48,24 @@ createServer(config, webpackConfig, (app) => {
                         id: result.cid,
                         name: result.name,
                         code: result.code,
-                        vid: result.vid
+                        layouts: OrderedMap()
                     }
                 }
+
+                var layout = course.layouts.get(result.lid);
+
+                if (null == layout) {
+                    layout = {
+                        id: result.lid,
+                        description: result.description,
+                        versions: OrderedMap()
+                    };
+                }
+
+                course.layouts = course.layouts.set(result.lid, layout);
+
+                // must convert courses.layouts to array
+                // must convert courses.layouts[x].versions to array
                 courses = courses.set(result.cid, course);
             });
 
