@@ -19,7 +19,7 @@ export default class Home extends Component {
 		};
 	}
 
-	handleChange(val) {
+	handleCourseChange(val) {
 		if (val) {
 			this.setState({
 				course: val.value
@@ -31,10 +31,10 @@ export default class Home extends Component {
 		const { course, courses, version, scores } = this.props;
 
 		let fairwayCount = course.fairway_count;
-		let options = [];
-
+		let courseOptions = [];
+		
 		courses.map(c => {
-			options.push({
+			courseOptions.push({
 				value: c.id,
 				label: c.code
 			});
@@ -46,8 +46,8 @@ export default class Home extends Component {
 					<Select
 						name="form-field-name"
 						value={this.state.course}
-						options={options}
-						onChange={::this.handleChange}
+						options={courseOptions}
+						onChange={::this.handleCourseChange}
 					/>
 				</div>
 
