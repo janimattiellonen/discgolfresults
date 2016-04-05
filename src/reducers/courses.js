@@ -26,7 +26,7 @@ export default handleActions({
 
 	COURSE_SELECT: (state, action) => {
 		let courseId = action.payload;
-		let course = state.courses.get(courseId)
+		let course = state.courses.get(courseId);
 		return {
 			...state,
 			course: course,

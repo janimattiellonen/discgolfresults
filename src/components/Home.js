@@ -15,7 +15,8 @@ export default class Home extends Component {
 		super(props);
 
 		this.state = {
-			course: null
+			course: null,
+			layout: null
 		};
 	}
 
@@ -24,21 +25,41 @@ export default class Home extends Component {
 			this.setState({
 				course: val.value
 			});
+
+			this.props.courseActions.selectCourse(val.value);
+		}
+	}
+
+
+	handleLayoutChange(val) {
+		if (val) {
+			this.setState({
+				layout: val.value
+			});
 		}
 	}
 
 	render() {
-		const { course, courses, version, scores } = this.props;
+		const { course, courses, layouts, version, scores } = this.props;
 
 		let fairwayCount = course.fairway_count;
 		let courseOptions = [];
-		
+		let layoutOptions = [];
+
 		courses.map(c => {
 			courseOptions.push({
 				value: c.id,
 				label: c.code
 			});
 		});
+
+		layouts.map(l => {
+			layoutOptions.push({
+				value: l.id,
+				label: l.layout
+			});
+		});
+
 
 		return (
 			<div>
@@ -48,6 +69,13 @@ export default class Home extends Component {
 						value={this.state.course}
 						options={courseOptions}
 						onChange={::this.handleCourseChange}
+					/>
+
+					<Select
+						name="form-field-name"
+						value={this.state.layout}
+						options={layoutOptions}
+						onChange={::this.handleLayoutChange}
 					/>
 				</div>
 

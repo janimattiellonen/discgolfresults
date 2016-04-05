@@ -1,5 +1,6 @@
 import React,  {Component, PropTypes } from 'react';
 import * as ScoreActions from '../../actions/ScoreActions';
+import * as CourseActions from '../../actions/CourseActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Home from '../Home';
@@ -11,13 +12,16 @@ export default connect(
         return {
             course: state.scores.course,
             courses: state.courses.courses,
+            layouts: state.courses.layouts,
+            versions: state.courses.version,
             version: state.scores.course.version,
             scores: state.scores.scores
         };
     },
     function mapDispatchToProps(dispatch) {
         return { 
-            scoreActions: bindActionCreators(ScoreActions, dispatch)
+            scoreActions: bindActionCreators(ScoreActions, dispatch),
+            courseActions: bindActionCreators(CourseActions, dispatch)
         };
     }
 )(Home);
