@@ -58,18 +58,32 @@ createServer(config, webpackConfig, (app) => {
                     layout = {
                         id: result.lid,
                         description: result.description,
+                        layout: result.layout,
                         versions: OrderedMap()
                     };
                 }
 
+                var version = layout.versions.get(result.vid);
+
+                if (null == version) {
+                    version = {
+                        id: result.vid,
+                        version: result.version
+                    };
+                }
+
+                layout.versions = layout.versions.set(result.vid, version);
+
                 course.layouts = course.layouts.set(result.lid, layout);
 
-                // must convert courses.layouts to array
-                // must convert courses.layouts[x].versions to array
                 courses = courses.set(result.cid, course);
             });
 
-            res.status(200).json({data: courses.toArray()});
+            // must convert courses.layouts to array
+            // must convert courses.layouts[x].versions to array
+            courses = courseService.toArray(courses);
+
+            res.status(200).json({data: courses});
         });
     });
 
