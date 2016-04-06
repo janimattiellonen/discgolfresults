@@ -16,11 +16,14 @@ export default class Home extends Component {
 
 		this.state = {
 			course: null,
-			layout: null
+			layout: null,
+			version: null
 		};
 	}
 
 	handleCourseChange(val) {
+		console.log("cccid: " + val);
+
 		if (val) {
 			this.setState({
 				course: val.value
@@ -36,15 +39,26 @@ export default class Home extends Component {
 			this.setState({
 				layout: val.value
 			});
+
+			this.props.courseActions.selectLayout(val.value);
+		}
+	}
+
+	handleVersionChange(val) {
+		if (val) {
+			this.setState({
+				version: val.value
+			});
 		}
 	}
 
 	render() {
-		const { course, courses, layouts, version, scores } = this.props;
+		const { course, courses, layouts, versions, version, scores } = this.props;
 
 		let fairwayCount = course.fairway_count;
 		let courseOptions = [];
 		let layoutOptions = [];
+		let versionOptions = [];
 
 		courses.map(c => {
 			courseOptions.push({
@@ -57,6 +71,13 @@ export default class Home extends Component {
 			layoutOptions.push({
 				value: l.id,
 				label: l.layout
+			});
+		});
+
+		versions.map(v => {
+			versionOptions.push({
+				value: v.id,
+				label: v.version
 			});
 		});
 
@@ -76,6 +97,13 @@ export default class Home extends Component {
 						value={this.state.layout}
 						options={layoutOptions}
 						onChange={::this.handleLayoutChange}
+					/>
+
+					<Select
+						name="form-field-name"
+						value={this.state.version}
+						options={versionOptions}
+						onChange={::this.handleVersionChange}
 					/>
 				</div>
 

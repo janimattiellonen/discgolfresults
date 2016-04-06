@@ -26,11 +26,38 @@ export default handleActions({
 
 	COURSE_SELECT: (state, action) => {
 		let courseId = action.payload;
-		let course = state.courses.get(courseId);
+		console.log("cid: " + courseId);
+		console.log("size: " + state.courses.count());
+		console.log("ss: " + JSON.stringify(state.courses));
+
+		let index = state.courses.findIndex(item => item.id === courseId);
+		let course = state.courses.get(index);
+		console.log("luts: " + JSON.stringify(course));
+		console.log("layouts: " + JSON.stringify(course.layouts));
+
 		return {
 			...state,
 			course: course,
 			layouts: course.layouts
+		}
+	},
+
+	LAYOUT_SELECT: (state, action) => {
+		let layoutId = action.payload;
+
+		console.log("lid: " + layoutId);
+		let index = state.course.layouts.findIndex(item => item.id === layoutId);
+		console.log("l index: " + index);
+		let layout = state.course.layouts.get(index);
+
+		console.log("layout: " + JSON.stringify(layout));
+
+		console.log("l versions: " + JSON.stringify(layout.versions));
+
+		return {
+			...state,
+			layout: layout,
+			versions: layout.versions
 		}
 	}
 }, {courses: List(), layouts: List(), versions: List()});

@@ -13,7 +13,7 @@ export default connect(
             course: state.scores.course,
             courses: state.courses.courses,
             layouts: state.courses.layouts,
-            versions: state.courses.version,
+            versions: state.courses.versions,
             version: state.scores.course.version,
             scores: state.scores.scores
         };

@@ -23,3 +23,11 @@ export function selectCourse(courseId) {
 		payload: courseId
 	}
 }
+
+export function selectLayout(layoutId) {
+	return {
+		type: 'LAYOUT_SELECT',
+		payload: layoutId
+	}
+	
+}
