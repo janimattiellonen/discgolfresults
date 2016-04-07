@@ -49,6 +49,8 @@ export default class Home extends Component {
 			this.setState({
 				version: val.value
 			});
+
+			this.props.scoreActions.getScores(val.value);
 		}
 	}
 
@@ -80,7 +82,6 @@ export default class Home extends Component {
 				label: v.version
 			});
 		});
-
 
 		return (
 			<div>

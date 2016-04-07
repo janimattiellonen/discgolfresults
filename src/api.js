@@ -6,7 +6,11 @@ export default {
 		return axios.get('/api/courses').then(res => res.data.data);
 	},
 
-	getScores() {
-		return axios.get('/api/scores').then(res => res.data.data);
+	getScores(versionId) {
+		console.log("ss: " + versionId);
+		return axios.get('/api/scores', {
+			params: {
+				vid: versionId
+		}}).then(res => res.data.data);
 	}
 }

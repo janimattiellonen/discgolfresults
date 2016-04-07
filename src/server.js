@@ -91,7 +91,10 @@ createServer(config, webpackConfig, (app) => {
         let connection = getConnection();
         scoreService.setConnection(connection);
 
-        scoreService.getScores(10, (err, results) => {
+console.log(JSON.stringify(req.query));
+        let vid = req.query.vid || 10;
+
+        scoreService.getScores(vid, (err, results) => {
 
             let course = {};
 
