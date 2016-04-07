@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 
-import { List } from 'immutable';
+import { List, OrderedMap } from 'immutable';
 import SmartSearch from 'smart-search';
 import classNames from 'classnames';
 import Select from 'react-select';
 
 import * as Utils from '../utils';
+import ScoreTable from './ScoreTable';
 
 export default class Home extends Component {
 
@@ -57,7 +58,6 @@ export default class Home extends Component {
 	render() {
 		const { course, courses, layouts, versions, version, scores } = this.props;
 
-		let fairwayCount = course.fairway_count;
 		let courseOptions = [];
 		let layoutOptions = [];
 		let versionOptions = [];
@@ -86,22 +86,26 @@ export default class Home extends Component {
 		return (
 			<div>
 				<div className="search-container">
+
+					<label for="course-select">Course</label>
 					<Select
-						name="form-field-name"
+						id="course-select"
 						value={this.state.course}
 						options={courseOptions}
 						onChange={::this.handleCourseChange}
 					/>
 
+					<label for="layout-select">Layout</label>
 					<Select
-						name="form-field-name"
+						id="layout-select"
 						value={this.state.layout}
 						options={layoutOptions}
 						onChange={::this.handleLayoutChange}
 					/>
 
+					<label for="version-select">Version</label>
 					<Select
-						name="form-field-name"
+						id="version-select"
 						value={this.state.version}
 						options={versionOptions}
 						onChange={::this.handleVersionChange}
@@ -109,98 +113,31 @@ export default class Home extends Component {
 				</div>
 
 				<div className="scores-container">
-					<table>
-						<thead>
-							<tr>
-								<th>{course.code}</th>
-								{_.range(fairwayCount).map(index => {
-									return (
-										<th>{(index + 1)}</th>
-									)
-								})}
-								<th>Total</th>
-							</tr>
-							<tr>
-								<th>Par</th>
-								{_.range(fairwayCount).map(index => {
-									return (
-										<td>{this.getParForHole(index + 1)}</td>
-									)
-								})}
-								<td>{version.total_par}</td>
-							</tr>
-							<tr>
-								<th>Length (m)</th>
-								{_.range(fairwayCount).map(index => {
-									return (
-										<td>{this.getHoleLength(index + 1)}</td>
-									)
-								})}
-								<td>{version.total_length}</td>
-							</tr>						
-						</thead>
-						<tbody>
-							{scores.map((score, i) => {
-								return (
-									<tr key={'score-' + i}>
-										<td key={'date' + i}>{Utils.date_format(score.date)}</td>
-										{_.range(fairwayCount).map((index, j) => {
-											let result = score['t' + (index + 1)];
-											let key = 'score' + i + '-' + j;
-											return (<td key={key} className={classNames(this.getScoreClass(result, j + 1))}>{result}</td>);
-										})}
-										<td>{score.total} ({this.renderScore(score.score)})</td>
-									</tr>
-								)
-							})}	
-						</tbody>
-						<tfoot>
-
-						</tfoot>
-					</table>
+					<ScoreTable course={course} version={version} scores={scores} />
 				</div>
 			</div>
 		);
 	}	
 
-	renderScore(score) {
-		if (score > 0) {
-			return "+" + score;
-		}
+	
 
-		return score;
-	}
+	getBestScores() {
+		const { course, scores } = this.props;
 
-	getScoreClass(score, hole) {
-		const { course } = this.props;
+ 		let bestScores = OrderedMap();
 
-		const par = this.getParForHole(hole);
+ 		scores.map((score, i) => {
+ 			_.range(course.fairway_count).map((index, j) => {
+	 			let result = score['t' + (j + 1)];
+	 			let currentBestResult = bestScores.get(j);
 
-		if (score == 1) {
-			return 'hole-ine-one';
-		} else if (par - score == 1) {
-			return 'birdie';
-		} else if (par - score == 2) {
-			return 'eagle';
-		} else if (par - score == -1) {
-			return 'bogey';
-		} else if (par - score == -2) {
-			return 'double-bogey'
-		} else {
-			return 'other';
-		}
-	}
+	 			if (!currentBestResult || result < currentBestResult) {
+	 				bestScores = bestScores.set(j, result);
+	 			}
+ 			});
+ 		});
 
-	getParForHole(hole) {
-		const { version } = this.props;
-
-		return version.holes[hole - 1].par;
-	}
-
-	getHoleLength(hole) {
-		const { version } = this.props;
-
-		return version.holes[hole - 1].length;
+ 		return bestScores;
 	}
 };
 
