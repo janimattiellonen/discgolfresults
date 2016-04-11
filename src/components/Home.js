@@ -83,6 +83,9 @@ export default class Home extends Component {
 			});
 		});
 
+		let worstScores = this.getWorstScores();
+		let bestScores = this.getBestScores();
+
 		return (
 			<div>
 				<div className="search-container">
@@ -113,16 +116,24 @@ export default class Home extends Component {
 				</div>
 
 				<div className="scores-container">
+					<ScoreTable course={course} version={version} scores={worstScores} />
+					<br/>
+					<br/>
+					<ScoreTable course={course} version={version} scores={bestScores} />
+					<br/>
+					<br/>
 					<ScoreTable course={course} version={version} scores={scores} />
 				</div>
 			</div>
 		);
 	}	
 
-	
-
 	getBestScores() {
 		const { course, scores } = this.props;
+
+		if (!course.version) {
+			return List();
+		}
 
  		let bestScores = OrderedMap();
 
@@ -137,9 +148,62 @@ export default class Home extends Component {
  			});
  		});
 
- 		return bestScores;
+ 		let total = _.sum(bestScores.toArray());
+
+ 		let obj = {
+ 			date: null,
+ 			total: total,
+ 			score: total - course.version.total_par,
+ 		};
+
+ 		bestScores.map((score, i) => {
+ 			obj['t' + (i + 1)] = score;
+ 		});
+
+ 		console.log("RR: " + JSON.stringify(obj));
+
+ 		return List([obj]);
+	}
+
+	getWorstScores() {
+		const { course, scores } = this.props;
+
+		if (!course.version) {
+			return List();
+		}
+
+ 		let bestScores = OrderedMap();
+
+ 		scores.map((score, i) => {
+ 			_.range(course.fairway_count).map((index, j) => {
+	 			let result = score['t' + (j + 1)];
+	 			let currentBestResult = bestScores.get(j);
+
+	 			if (!currentBestResult || result > currentBestResult) {
+	 				bestScores = bestScores.set(j, result);
+	 			}
+ 			});
+ 		});
+
+ 		let total = _.sum(bestScores.toArray());
+
+ 		let obj = {
+ 			date: null,
+ 			total: total,
+ 			score: total - course.version.total_par,
+ 		};
+
+ 		bestScores.map((score, i) => {
+ 			obj['t' + (i + 1)] = score;
+ 		});
+
+ 		console.log("RR: " + JSON.stringify(obj));
+
+ 		return List([obj]);
 	}
 };
+
+
 
 Home.defaultProps = {
     version: {
