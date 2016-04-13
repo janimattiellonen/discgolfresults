@@ -83,8 +83,8 @@ export default class Home extends Component {
 			});
 		});
 
-		let worstScores = this.getWorstScores();
-		let bestScores = this.getBestScores();
+		let worstScores = this.getCustomScores(this.isHigher);
+		let bestScores = this.getCustomScores(this.isLower);
 
 		let worstAndBest = bestScores.concat(worstScores);
 
@@ -127,42 +127,15 @@ export default class Home extends Component {
 		);
 	}	
 
-	getBestScores() {
-		const { course, scores } = this.props;
-
-		if (!course.version) {
-			return List();
-		}
-
- 		let bestScores = OrderedMap();
-
- 		scores.map((score, i) => {
- 			_.range(course.fairway_count).map((index, j) => {
-	 			let result = score['t' + (j + 1)];
-	 			let currentBestResult = bestScores.get(j);
-
-	 			if (!currentBestResult || result < currentBestResult) {
-	 				bestScores = bestScores.set(j, result);
-	 			}
- 			});
- 		});
-
- 		let total = _.sum(bestScores.toArray());
-
- 		let obj = {
- 			date: null,
- 			total: total,
- 			score: total - course.version.total_par,
- 		};
-
- 		bestScores.map((score, i) => {
- 			obj['t' + (i + 1)] = score;
- 		});
-
- 		return List([obj]);
+	isLower(currentBestResult, result) {
+		return !currentBestResult || result < currentBestResult;
 	}
 
-	getWorstScores() {
+	isHigher(currentBestResult, result) {
+		return !currentBestResult || result > currentBestResult;
+	}
+
+	getCustomScores(comparator) {
 		const { course, scores } = this.props;
 
 		if (!course.version) {
@@ -176,7 +149,7 @@ export default class Home extends Component {
 	 			let result = score['t' + (j + 1)];
 	 			let currentBestResult = bestScores.get(j);
 
-	 			if (!currentBestResult || result > currentBestResult) {
+	 			if (comparator(currentBestResult, result)) {
 	 				bestScores = bestScores.set(j, result);
 	 			}
  			});
@@ -197,8 +170,6 @@ export default class Home extends Component {
  		return List([obj]);
 	}
 };
-
-
 
 Home.defaultProps = {
     version: {
