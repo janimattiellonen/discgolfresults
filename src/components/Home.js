@@ -86,6 +86,8 @@ export default class Home extends Component {
 		let worstScores = this.getWorstScores();
 		let bestScores = this.getBestScores();
 
+		let worstAndBest = bestScores.concat(worstScores);
+
 		return (
 			<div>
 				<div className="search-container">
@@ -116,10 +118,7 @@ export default class Home extends Component {
 				</div>
 
 				<div className="scores-container">
-					<ScoreTable course={course} version={version} scores={worstScores} />
-					<br/>
-					<br/>
-					<ScoreTable course={course} version={version} scores={bestScores} />
+					<ScoreTable course={course} version={version} scores={worstAndBest} />
 					<br/>
 					<br/>
 					<ScoreTable course={course} version={version} scores={scores} />
@@ -160,8 +159,6 @@ export default class Home extends Component {
  			obj['t' + (i + 1)] = score;
  		});
 
- 		console.log("RR: " + JSON.stringify(obj));
-
  		return List([obj]);
 	}
 
@@ -196,8 +193,6 @@ export default class Home extends Component {
  		bestScores.map((score, i) => {
  			obj['t' + (i + 1)] = score;
  		});
-
- 		console.log("RR: " + JSON.stringify(obj));
 
  		return List([obj]);
 	}
